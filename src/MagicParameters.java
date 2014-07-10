@@ -8,6 +8,11 @@ import java.util.List;
  * Created by User on 7/10/2014.
  */
 public class MagicParameters {
+    public static String version = "0.0.3";
+    public static String userkey = "unknown";
+    public static String username = "unknown";
+    public static String hostname = "unknown";
+    public static boolean debug = false;
     static String readFile(String path, Charset encoding)
             throws IOException
     {
@@ -31,19 +36,24 @@ public class MagicParameters {
     hostname:aiaas.pandorabots.com
     username:drwallace
     userkey:xxxxxxxxxxxxxxxxxxxxxxxx
+    debug:false
 
     The userkey is provided at developer.pandorabots.com
 
-     */
+    */
     static void readParameters() {
         try {
             List<String> lines = readLines("config.txt", Charset.defaultCharset());
             for (String line : lines) {
                 String[] pair = line.split(":");
                 if (pair.length >= 2) {
-                    if (pair[0].equals("userkey")) MagicParameters.userkey = pair[1];
-                    else if (pair[0].equals("username")) MagicParameters.username = pair[1];
-                    else if (pair[0].equals("hostname")) MagicParameters.hostname = pair[1];
+                    if (pair[0].equals("userkey")) userkey = pair[1];
+                    else if (pair[0].equals("username")) username = pair[1];
+                    else if (pair[0].equals("hostname")) hostname = pair[1];
+                    else if (pair[0].equals("debug")) {
+                        if (pair[1].equals("true")) debug = true;
+                        else debug = false;
+                    }
                     System.out.println("pair =" + pair[0] + "," + pair[1]);
                 }
             }
@@ -52,9 +62,5 @@ public class MagicParameters {
             ex.printStackTrace();
         }
     }
-    public static String version = "0.0.1";
-    public static String userkey = "unknown";
-    public static String username = "unknown";
-    public static String hostname = "unknown";
-    public static boolean debug = false;
+
 }
