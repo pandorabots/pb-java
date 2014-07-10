@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="pb-java-libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient-4.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient-cache-4.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpcore-4.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpmime-4.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/json-20090211.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,217 @@
+import org.apache.commons.logging.Log;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.*;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/**
+ * Created by User on 6/25/2014.
+ */
+public class PandorabotsAPIHttpClient {
+
+    private String host = "";
+    private String userkey = "";
+    private String username = "";
+    private String sessionid = "";
+    private boolean debug = true;
+    private String TAG = "PandorabotsAPIHttpClient";
+
+    private void Log(String TAG, String x) {
+        System.out.println(TAG+": "+x);
+    }
+
+    public String readFile(String filename)
+    {
+        String content = null;
+        File file = new File(filename); //for ex foo.txt
+        try {
+            FileReader reader = new FileReader(file);
+            char[] chars = new char[(int) file.length()];
+            reader.read(chars);
+            content = new String(chars);
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
+    }
+
+    public PandorabotsAPIHttpClient(String host, String username, String userkey) {
+        this(host, username, userkey, true);
+    }
+
+    public PandorabotsAPIHttpClient(String host, String username, String userkey, Boolean debug) {
+        this.host = host;
+        this.username = username;
+        this.userkey = userkey;
+        this.debug = debug;
+    }
+
+    public String readResponse (HttpResponse httpResp) {
+        String response = "";
+        try {
+            int code = httpResp.getStatusLine().getStatusCode();
+            if (debug) Log(TAG, "Response code = " + code);
+            InputStream is = httpResp.getEntity().getContent();
+            BufferedReader inb = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder("");
+            String line;
+            String NL = System.getProperty("line.separator");
+            while ((line = inb.readLine()) != null) {
+                sb.append(line).append(NL);
+                if (debug) Log(TAG, "Read " + line);
+            }
+            inb.close();
+            response = sb.toString();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return response;
+    }
+
+    public void createBot(String botname) {
+        if (debug) Log(TAG, "Create bot " + botname);
+        try {
+            HttpClient client = new DefaultHttpClient();
+            String url = "http://" + host + "/bot/" + username + "/" + botname;
+            if (debug) Log(TAG, "url = " + url);
+            HttpPut request = new HttpPut();
+            request.setURI(new URI(url));
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+            nameValuePairs.add(new BasicNameValuePair("user_key",
+                    userkey));
+            HttpEntity entity = new UrlEncodedFormEntity(nameValuePairs);
+            if (debug) Log(TAG, "entity = " + nameValuePairs);
+            request.setEntity(entity);
+            //InputStream is = client.execute(request).getEntity().getContent();
+            HttpResponse httpResp = client.execute(request);
+            readResponse(httpResp);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
+
+    public void deleteBot(String botname) {
+        if (debug) Log(TAG, "Delete bot " + botname);
+        try {
+            HttpClient client = new DefaultHttpClient();
+            String url = "http://" + host + "/bot/" + username + "/" + botname+"?user_key="+userkey;
+            if (debug) Log(TAG, "url = " + url);
+            HttpDeleteWithBody request = new HttpDeleteWithBody();
+            request.setURI(new URI(url));
+            HttpResponse httpResp = client.execute(request);
+            readResponse(httpResp);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    // curl -v  -X GET "http://aiaas.pandorabots.com/bot/drwallace/alice2/verify?user_key=41805b6ef707445649d149af6cfa93db"
+    public void compileBot(String botname) {
+        if (debug) Log(TAG, "Compile bot " + botname);
+        try {
+            HttpClient client = new DefaultHttpClient();
+            String url = "http://" + host + "/bot/" + username + "/" + botname+"/"+"verify?user_key="+userkey;
+            if (debug) Log(TAG, "url = " + url);
+            HttpGet request = new HttpGet();
+            request.setURI(new URI(url));
+            HttpResponse httpResp = client.execute(request);
+            readResponse(httpResp);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    // curl -v  -X POST "http://aiaas.pandorabots.com/talk/drwallace/alice2" -d 'input=hello&user_key=41805b6ef707445649d149af6cfa93db'
+    public String talk(String botname, String input) {
+        if (debug) Log(TAG, "Talk " + botname + " \"" + input + "\"");
+        String response = "";
+        try {
+            HttpClient client = new DefaultHttpClient();
+            String url = "http://" + host + "/talk/" + username + "/" + botname;
+            if (debug) Log(TAG, "url = " + url);
+            HttpPost request = new HttpPost();
+            request.setURI(new URI(url));
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+            if (sessionid.length() > 0) nameValuePairs.add(new BasicNameValuePair("sessionid", sessionid));
+            nameValuePairs.add(new BasicNameValuePair("input", input));
+            nameValuePairs.add(new BasicNameValuePair("user_key", userkey));
+            HttpEntity entity = new UrlEncodedFormEntity(nameValuePairs);
+            if (debug) Log(TAG, "entity = " + nameValuePairs);
+            request.setEntity(entity);
+            HttpResponse httpResp = client.execute(request);
+            String jsonStringResponse = readResponse(httpResp);
+            JSONObject jsonObj = new JSONObject(jsonStringResponse);
+            JSONArray responses = jsonObj.getJSONArray("responses");
+            for (int i = 0; i < responses.length(); i++) response += " "+responses.getString(i);
+            response = response.trim();
+            sessionid = jsonObj.getString("sessionid");
+            if (debug) Log(TAG, "response = " + response);
+            if (debug) Log(TAG, "sessionid = " + sessionid);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return response;
+
+
+    }
+    // Upload file /bot/{username}/{botname}/{file-kind}/{filename
+    public void uploadFile(String botname, String filename) {
+        String fileType = "file";
+        boolean includeFileName = true;
+        try {
+            File file = new File(filename);
+            String basename = file.getName();
+            if (filename.contains("substitution")) {fileType = "substitution"; basename = filename.substring(0, basename.lastIndexOf('.'));}
+            else if (filename.contains(".properties")) {fileType = "properties"; includeFileName = false;}
+            else if (filename.contains(".pdefaults")) {fileType = "pdefaults"; includeFileName = false;}
+            else if (filename.contains(".map")) {fileType = "map"; basename = basename.substring(0, basename.lastIndexOf('.'));}
+            else if (filename.contains(".set")) {fileType = "set"; basename = basename.substring(0, basename.lastIndexOf('.'));}
+            if (debug) Log(TAG, "Upload  File " + botname);
+            if (debug) Log(TAG, "Basename = "+basename);
+            HttpClient client = new DefaultHttpClient();
+            String url = "http://" + host + "/bot/" + username + "/" + botname +"/"+fileType+(includeFileName ? "/"+basename : "")+"?user_key="+userkey;
+            if (debug) Log(TAG, "url = " + url);
+            HttpPut request = new HttpPut();
+            request.setURI(new URI(url));
+
+            String data = readFile(filename);
+            StringEntity entity = new StringEntity(data);
+            //if (debug) Log(TAG, "entity = " + data);
+            request.setEntity(entity);
+            //InputStream is = client.execute(request).getEntity().getContent();
+            HttpResponse httpResp = client.execute(request);
+            readResponse(httpResp);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+
+    }
+
+
+}
+
