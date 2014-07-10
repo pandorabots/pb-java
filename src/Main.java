@@ -2,19 +2,15 @@
  * Created by User on 6/26/2014.
  */
 public class Main {
-
-    public static String username = "drwallace";
-    public static String host = "aiaas.pandorabots.com";
-    public static String botname = "alice2";
-
-    public static String apikey = "41805b6ef707445649d149af6cfa93db"; // "95c3c5df117e2c35985c9f28b3e7c6ae";
-    //
-
     static String[] inputs = {"Hello", "How are you?", "name", "age", "gender", "Call me Richard", "air force blue"};
 
+    public static String botname = "alice2";
+
     public static void main (String[] args) {
-        System.out.println("pb-java version "+MagicStrings.version);
-        PandorabotsAPIHttpClient papihc = new PandorabotsAPIHttpClient(host, username, apikey, true);
+        System.out.println("pb-java version "+ MagicParameters.version);
+        MagicParameters.readParameters();
+        PandorabotsAPIHttpClient papihc
+                = new PandorabotsAPIHttpClient(MagicParameters.hostname, MagicParameters.username, MagicParameters.userkey);
         System.out.println("Creating bot "+botname);
         papihc.createBot(botname);
         System.out.println("Deleting bot "+botname);
