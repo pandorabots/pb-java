@@ -121,8 +121,11 @@ public class PandorabotsAPI {
 
     }
 
-    // curl -v  -X POST "http://aiaas.pandorabots.com/talk/drwallace/alice2" -d 'input=hello&user_key=41805b6ef707445649d149af6cfa93db'
     public String talk(String botname, String input) {
+        return debugBot(botname, input, false, false, false);
+    }
+    // curl -v  -X POST "http://aiaas.pandorabots.com/talk/drwallace/alice2" -d 'input=hello&user_key=41805b6ef707445649d149af6cfa93db'
+    public String debugBot(String botname, String input, boolean reset, boolean trace, boolean recent ) {
         Log(TAG, "Talk " + botname + " \"" + input + "\"");
         String response = "";
         try {
@@ -135,6 +138,9 @@ public class PandorabotsAPI {
             if (sessionid.length() > 0) nameValuePairs.add(new BasicNameValuePair("sessionid", sessionid));
             nameValuePairs.add(new BasicNameValuePair("input", input));
             nameValuePairs.add(new BasicNameValuePair("user_key", userkey));
+            if (reset) nameValuePairs.add(new BasicNameValuePair("reset", "true"));
+            if (trace) nameValuePairs.add(new BasicNameValuePair("trace", "true"));
+            if (recent) nameValuePairs.add(new BasicNameValuePair("recent", "true"));
             HttpEntity entity = new UrlEncodedFormEntity(nameValuePairs);
             Log(TAG, "entity = " + nameValuePairs);
             request.setEntity(entity);

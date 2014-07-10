@@ -54,7 +54,7 @@ public class MagicParameters {
                         if (pair[1].equals("true")) debug = true;
                         else debug = false;
                     }
-                    System.out.println("pair =" + pair[0] + "," + pair[1]);
+                    //System.out.println("pair =" + pair[0] + "," + pair[1]);
                 }
             }
 

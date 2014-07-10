@@ -34,6 +34,13 @@ public class Main {
             System.out.println("Human: "+request);
             System.out.println("Robot: "+response);
         }
+        for (int i = 0; i < inputs.length; i++) {
+            String request = inputs[i];
+            String response = papi.debugBot(botname, request, false, true, false);
+            System.out.println("Human: "+request);
+            System.out.println("Robot: "+response);
+
+        }
     }
 
 
