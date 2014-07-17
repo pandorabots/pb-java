@@ -29,6 +29,7 @@ public class PandorabotsAPI {
     private String username = "";
     private String sessionid = "";
     private String TAG = "PandorabotsAPI";
+    private String protocol = "https:";
 
     private void Log(String TAG, String x) {
         if (MagicParameters.debug) System.out.println(TAG+": "+x);
@@ -68,7 +69,7 @@ public class PandorabotsAPI {
         Log(TAG, "Create bot " + botname);
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = "http://" + host + "/bot/" + username + "/" + botname;
+            String url = protocol+"//" + host + "/bot/" + username + "/" + botname;
             Log(TAG, "url = " + url);
             HttpPut request = new HttpPut();
             request.setURI(new URI(url));
@@ -91,7 +92,7 @@ public class PandorabotsAPI {
         Log(TAG, "Delete bot " + botname);
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = "http://" + host + "/bot/" + username + "/" + botname+"?user_key="+userkey;
+            String url = protocol+"//" + host + "/bot/" + username + "/" + botname+"?user_key="+userkey;
             Log(TAG, "url = " + url);
             HttpDeleteWithBody request = new HttpDeleteWithBody();
             request.setURI(new URI(url));
@@ -108,7 +109,7 @@ public class PandorabotsAPI {
         Log(TAG, "Compile bot " + botname);
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = "http://" + host + "/bot/" + username + "/" + botname+"/"+"verify?user_key="+userkey;
+            String url = protocol+"//" + host + "/bot/" + username + "/" + botname+"/"+"verify?user_key="+userkey;
             Log(TAG, "url = " + url);
             HttpGet request = new HttpGet();
             request.setURI(new URI(url));
@@ -130,7 +131,7 @@ public class PandorabotsAPI {
         String response = "";
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = "http://" + host + "/talk/" + username + "/" + botname;
+            String url = protocol+"//" + host + "/talk/" + username + "/" + botname;
             Log(TAG, "url = " + url);
             HttpPost request = new HttpPost();
             request.setURI(new URI(url));
@@ -175,7 +176,7 @@ public class PandorabotsAPI {
             Log(TAG, "Upload  File " + botname);
             Log(TAG, "Basename = "+basename);
             HttpClient client = new DefaultHttpClient();
-            String url = "http://" + host + "/bot/" + username + "/" + botname +"/"+fileType+(includeFileName ? "/"+basename : "")+"?user_key="+userkey;
+            String url = protocol+"//" + host + "/bot/" + username + "/" + botname +"/"+fileType+(includeFileName ? "/"+basename : "")+"?user_key="+userkey;
             Log(TAG, "url = " + url);
             HttpPut request = new HttpPut();
             request.setURI(new URI(url));

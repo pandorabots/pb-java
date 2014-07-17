@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C://pb-java/pb-java.iml" filepath="C://pb-java/pb-java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pb-java.iml" filepath="$PROJECT_DIR$/pb-java.iml" />
     </modules>
   </component>
 </project>
