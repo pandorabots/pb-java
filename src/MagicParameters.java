@@ -8,7 +8,7 @@ import java.util.List;
  * Created by User on 7/10/2014.
  */
 public class MagicParameters {
-    public static String version = "0.0.3";
+    public static String version = "0.0.4";
     public static String userkey = "unknown";
     public static String username = "unknown";
     public static String hostname = "unknown";
@@ -41,9 +41,14 @@ public class MagicParameters {
     The userkey is provided at developer.pandorabots.com
 
     */
+
     static void readParameters() {
+        String cwd = System.getProperty("user.dir");
+        readParameters(cwd+"/config.txt");
+    }
+    static void readParameters(String configFileName) {
         try {
-            List<String> lines = readLines("config.txt", Charset.defaultCharset());
+            List<String> lines = readLines(configFileName, Charset.defaultCharset());
             for (String line : lines) {
                 String[] pair = line.split(":");
                 if (pair.length >= 2) {
