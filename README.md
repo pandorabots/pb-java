@@ -1,5 +1,7 @@
 # pb-java
 
+Last revised July 23, 2014
+
 ## Pandorabots API module for Java
 
 This project contains some sample Java code to access the Pandorabots API.
@@ -91,8 +93,8 @@ The userkey is provided at developer.pandorabots.com
 
 ##### HttpDeleteWithBody
 
-The HttpDeleteWithBody class is a helper class needed to implement the
-deleteBot() method in PandorabotsAPI.
+The `HttpDeleteWithBody` class is a helper class needed to implement the
+`deleteBot()` method in PandorabotsAPI.
 
 ##### PandorabotsAPI
 
