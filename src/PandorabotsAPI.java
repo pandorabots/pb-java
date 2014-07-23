@@ -126,6 +126,7 @@ public class PandorabotsAPI {
         return debugBot(botname, input, false, false, false);
     }
     // curl -v  -X POST "http://aiaas.pandorabots.com/talk/drwallace/alice2" -d 'input=hello&user_key=41805b6ef707445649d149af6cfa93db'
+
     public String debugBot(String botname, String input, boolean reset, boolean trace, boolean recent ) {
         Log(TAG, "Talk " + botname + " \"" + input + "\"");
         String response = "";

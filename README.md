@@ -2,10 +2,31 @@
 
 ## Pandorabots API module for Java
 
+This project contains some sample Java code to access the Pandorabots API.
+Use this project if:
+
+* You want to connect your Java or Android project to Pandorabots.
+* You have set up an account on developer.pandorabots.com and have an API key.
+
 ### Usage
 
 The simplest way to use the pb-java API is to include the classes
 HttpDeleteWithBody, MagicParameters, and PandorabotsAPI in your Java project.
+
+Most commonly, your Java project will simply connect to a pandorabot and talk to it.  You can easily implement this with:
+
+```
+public static String botname = "MyBot";
+MagicParameters.readParameters();
+PandorabotsAPI papi = new PandorabotsAPI(MagicParameters.hostname, MagicParameters.username, MagicParameters.userkey);
+```
+
+and
+
+```
+String request = "Hello!  My name is Joe.";
+String response = papi.talk(botname, request);
+```
 
 ### Dependencies
 
@@ -70,7 +91,19 @@ The userkey is provided at developer.pandorabots.com
 
 ##### HttpDeleteWithBody
 
+The HttpDeleteWithBody class is a helper class needed to implement the
+deleteBot() method in PandorabotsAPI.
+
 ##### PandorabotsAPI
 
+The class PandorabotsAPI is the core of the code to access the Pandorabots API.  The class contains several key methods:
 
+* public PandorabotsAPI(String host, String username, String userkey) -- constructor
+* public String readResponse (HttpResponse httpResp) -- read the response of an HTTP request and return a String.
+* public void createBot(String botname) -- create a bot named botname.
+* public void deleteBot(String botname) -- delete the bot named botname.
+* public void uploadFile(String botname, String filename) -- upload a file name filename to the bot named botname.
+* public void compileBot(String botname) -- compile the bot named botname.
+* public String talk(String botname, String input) -- send the string input tothe bot named botname, and return the bot's response as a String.
+* public String debugBot(String botname, String input, boolean reset, boolean trace, boolean recent) -- debug the bot's response to the input.  See the API documentation at develoepr.pandorabots.com for an explanation of the booleans reset, trace and recent.
 
