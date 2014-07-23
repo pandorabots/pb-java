@@ -57,17 +57,17 @@ The MagicParameters class encapsulates some global variables for your
 application:
 
 
-* static String version: the version number of the API.
-* static String hostname: the hostname of the Pandorabots host
-* static String username: your username on the Pandorabots host
-* static String userkey: your Pandorabots API user key (available from developer.pandorabots.com)
-* static boolean debug: A variable that tells the API whether to display debugging information.
+* `static String version`: the version number of the API.
+* `static String hostname`: the hostname of the Pandorabots host
+* `static String username`: your username on the Pandorabots host
+* `static String userkey`: your Pandorabots API user key (available from developer.pandorabots.com)
+* `static boolean debug`: A variable that tells the API whether to display debugging information.
 
 MagicParameters also contains a pair of methods to read the global 
 configuration data:
 
-* static void readParameters()
-* static void readParameters(String configFileName)
+* `static void readParameters()`
+* `static void readParameters(String configFileName)`
 
 The first method looks for a file called config.txt in the current working
 directory.  Use the second method if you want to specify a different file.
@@ -98,12 +98,12 @@ deleteBot() method in PandorabotsAPI.
 
 The class PandorabotsAPI is the core of the code to access the Pandorabots API.  The class contains several key methods:
 
-* public PandorabotsAPI(String host, String username, String userkey) -- constructor
-* public String readResponse (HttpResponse httpResp) -- read the response of an HTTP request and return a String.
-* public void createBot(String botname) -- create a bot named botname.
-* public void deleteBot(String botname) -- delete the bot named botname.
-* public void uploadFile(String botname, String filename) -- upload a file name filename to the bot named botname.
-* public void compileBot(String botname) -- compile the bot named botname.
-* public String talk(String botname, String input) -- send the string input tothe bot named botname, and return the bot's response as a String.
-* public String debugBot(String botname, String input, boolean reset, boolean trace, boolean recent) -- debug the bot's response to the input.  See the API documentation at develoepr.pandorabots.com for an explanation of the booleans reset, trace and recent.
+* `public PandorabotsAPI(String host, String username, String userkey)` -- constructor
+* `public String readResponse (HttpResponse httpResp)` -- read the response of an HTTP request and return a String.
+* `public void createBot(String botname)` -- create a bot named botname.
+* `public void deleteBot(String botname)` -- delete the bot named botname.
+* `public void uploadFile(String botname, String filename)` -- upload a file name filename to the bot named botname.
+* `public void compileBot(String botname)` -- compile the bot named botname.
+* `public String talk(String botname, String input)` -- send the string input tothe bot named botname, and return the bot's response as a String.
+* `public String debugBot(String botname, String input, boolean reset, boolean trace, boolean recent)` -- debug the bot's response to the input.  See the API documentation at develoepr.pandorabots.com for an explanation of the booleans reset, trace and recent.
 
