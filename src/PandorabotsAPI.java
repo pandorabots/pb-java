@@ -20,13 +20,32 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
+ * Pandorabots API Class
  * Created by User on 6/25/2014.
+ *
+ * Implements methods to access Pandorabots API:
+ *
+ * Log(TAG, x) - Print out debuggining info
+ * PandorabotsAPI(host, app_id, user_key) - Constructor
+ * readResponse(httpResponse) - read response from Pandorabots server
+ * createBot(botname) - create a pandorabot.
+ * deleteBot(botname) - delete a pandorabot.
+ * uploadFile(botname, filename) - upload a file to a pandorabot.
+ * compileBot(botname) - compile a pandorabot.
+ * talk(botname, input) - talk to a bot.
+ * talk(botname, client_name, input) - talk to a bot as a specific client.
+ * debugBot(botname, client_name, input, reset, trace, recent) -
+ *   more general version of talk method that returns detailed debugging information.
+ *
+ * See: https://developer.pandorabots.com/docs
+ *
+ *
  */
 public class PandorabotsAPI {
 
     private String host = "";
-    private String userkey = "";
-    private String username = "";
+    private String user_key = "";
+    private String app_id = "";
     private String sessionid = "";
     private String TAG = "PandorabotsAPI";
     private String protocol = "https:";
@@ -35,10 +54,10 @@ public class PandorabotsAPI {
         if (MagicParameters.debug) System.out.println(TAG+": "+x);
     }
 
-    public PandorabotsAPI(String host, String username, String userkey) {
+    public PandorabotsAPI(String host, String app_id, String user_key) {
         this.host = host;
-        this.username = username;
-        this.userkey = userkey;
+        this.app_id = app_id;
+        this.user_key = user_key;
     }
 
     public String readResponse (HttpResponse httpResp) {
@@ -69,13 +88,13 @@ public class PandorabotsAPI {
         Log(TAG, "Create bot " + botname);
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = protocol+"//" + host + "/bot/" + username + "/" + botname;
+            String url = protocol+"//" + host + "/bot/" + app_id + "/" + botname;
             Log(TAG, "url = " + url);
             HttpPut request = new HttpPut();
             request.setURI(new URI(url));
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
             nameValuePairs.add(new BasicNameValuePair("user_key",
-                    userkey));
+                    user_key));
             HttpEntity entity = new UrlEncodedFormEntity(nameValuePairs);
             Log(TAG, "entity = " + nameValuePairs);
             request.setEntity(entity);
@@ -92,7 +111,7 @@ public class PandorabotsAPI {
         Log(TAG, "Delete bot " + botname);
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = protocol+"//" + host + "/bot/" + username + "/" + botname+"?user_key="+userkey;
+            String url = protocol+"//" + host + "/bot/" + app_id + "/" + botname+"?user_key="+user_key;
             Log(TAG, "url = " + url);
             HttpDeleteWithBody request = new HttpDeleteWithBody();
             request.setURI(new URI(url));
@@ -109,7 +128,7 @@ public class PandorabotsAPI {
         Log(TAG, "Compile bot " + botname);
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = protocol+"//" + host + "/bot/" + username + "/" + botname+"/"+"verify?user_key="+userkey;
+            String url = protocol+"//" + host + "/bot/" + app_id + "/" + botname+"/"+"verify?user_key="+user_key;
             Log(TAG, "url = " + url);
             HttpGet request = new HttpGet();
             request.setURI(new URI(url));
@@ -123,23 +142,28 @@ public class PandorabotsAPI {
     }
 
     public String talk(String botname, String input) {
-        return debugBot(botname, input, false, false, false);
+        return debugBot(botname, "", input, false, false, false);
+    }
+
+    public String talk(String botname, String client_name, String input) {
+        return debugBot(botname, client_name, input, false, false, false);
     }
     // curl -v  -X POST "http://aiaas.pandorabots.com/talk/drwallace/alice2" -d 'input=hello&user_key=41805b6ef707445649d149af6cfa93db'
 
-    public String debugBot(String botname, String input, boolean reset, boolean trace, boolean recent ) {
+    public String debugBot(String botname, String client_name, String input, boolean reset, boolean trace, boolean recent) {
         Log(TAG, "Talk " + botname + " \"" + input + "\"");
         String response = "";
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = protocol+"//" + host + "/talk/" + username + "/" + botname;
+            String url = protocol+"//" + host + "/talk/" + app_id + "/" + botname;
             Log(TAG, "url = " + url);
             HttpPost request = new HttpPost();
             request.setURI(new URI(url));
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
             if (sessionid.length() > 0) nameValuePairs.add(new BasicNameValuePair("sessionid", sessionid));
+            if (client_name.length() > 0) nameValuePairs.add(new BasicNameValuePair("client_name", client_name));
             nameValuePairs.add(new BasicNameValuePair("input", input));
-            nameValuePairs.add(new BasicNameValuePair("user_key", userkey));
+            nameValuePairs.add(new BasicNameValuePair("user_key", user_key));
             if (reset) nameValuePairs.add(new BasicNameValuePair("reset", "true"));
             if (trace) nameValuePairs.add(new BasicNameValuePair("trace", "true"));
             if (recent) nameValuePairs.add(new BasicNameValuePair("recent", "true"));
@@ -162,7 +186,7 @@ public class PandorabotsAPI {
 
 
     }
-    // Upload file /bot/{username}/{botname}/{file-kind}/{filename
+    // Upload file /bot/{appid}/{botname}/{file-kind}/{filename
     public void uploadFile(String botname, String filename) {
         String fileType = "file";
         boolean includeFileName = true;
@@ -177,7 +201,7 @@ public class PandorabotsAPI {
             Log(TAG, "Upload  File " + botname);
             Log(TAG, "Basename = "+basename);
             HttpClient client = new DefaultHttpClient();
-            String url = protocol+"//" + host + "/bot/" + username + "/" + botname +"/"+fileType+(includeFileName ? "/"+basename : "")+"?user_key="+userkey;
+            String url = protocol+"//" + host + "/bot/" + app_id + "/" + botname +"/"+fileType+(includeFileName ? "/"+basename : "")+"?user_key="+user_key;
             Log(TAG, "url = " + url);
             HttpPut request = new HttpPut();
             request.setURI(new URI(url));

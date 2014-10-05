@@ -1,6 +1,8 @@
 # pb-java
 
-Last revised July 23, 2014
+Version 0.0.5
+
+Last revised October 5, 2014
 
 ## Pandorabots API module for Java
 
@@ -20,7 +22,8 @@ Most commonly, your Java project will simply connect to a pandorabot and talk to
 ```
 public static String botname = "MyBot";
 MagicParameters.readParameters();
-PandorabotsAPI papi = new PandorabotsAPI(MagicParameters.hostname, MagicParameters.username, MagicParameters.userkey);
+PandorabotsAPI papi = new PandorabotsAPI(MagicParameters.hostname, MagicParameters.app_id, MagicParameters.user_key);
+       
 ```
 
 and
@@ -61,8 +64,8 @@ application:
 
 * `static String version`: the version number of the API.
 * `static String hostname`: the hostname of the Pandorabots host
-* `static String username`: your username on the Pandorabots host
-* `static String userkey`: your Pandorabots API user key (available from developer.pandorabots.com)
+* `static String app_id`: your Applicato ID on the Pandorabots host
+* `static String user_key`: your Pandorabots API user key (available from developer.pandorabots.com)
 * `static boolean debug`: A variable that tells the API whether to display debugging information.
 
 MagicParameters also contains a pair of methods to read the global 
@@ -83,13 +86,15 @@ parametername:value
 e.g.
 
 ```
+user_key:f0123456789abcdef0123456789abcde
+app_id:1234567890123
 hostname:aiaas.pandorabots.com
-username:drwallace
-userkey:xxxxxxxxxxxxxxxxxxxxxxxx
-debug:false
+debug:true
+
 ```
 
-The userkey is provided at developer.pandorabots.com
+The user_key and app_id are provided at developer.pandorabots.com
+as "User Key" and "Application ID respectively.
 
 ##### HttpDeleteWithBody
 
@@ -100,12 +105,13 @@ The `HttpDeleteWithBody` class is a helper class needed to implement the
 
 The class PandorabotsAPI is the core of the code to access the Pandorabots API.  The class contains several key methods:
 
-* `public PandorabotsAPI(String host, String username, String userkey)` -- constructor
+* `public PandorabotsAPI(String host, String app_id, String user_key)` -- constructor
 * `public String readResponse (HttpResponse httpResp)` -- read the response of an HTTP request and return a String.
 * `public void createBot(String botname)` -- create a bot named botname.
 * `public void deleteBot(String botname)` -- delete the bot named botname.
 * `public void uploadFile(String botname, String filename)` -- upload a file name filename to the bot named botname.
 * `public void compileBot(String botname)` -- compile the bot named botname.
 * `public String talk(String botname, String input)` -- send the string input tothe bot named botname, and return the bot's response as a String.
-* `public String debugBot(String botname, String input, boolean reset, boolean trace, boolean recent)` -- debug the bot's response to the input.  See the API documentation at develoepr.pandorabots.com for an explanation of the booleans reset, trace and recent.
+* `public String talk(String botname, String client_name, String input)` -- talk to the bot as a specific client.
+* `public String debugBot(String botname, String client_name, String input, boolean reset, boolean trace, boolean recent)` -- debug the bot's response to the input.  See the API documentation at develoepr.pandorabots.com for an explanation of the booleans reset, trace and recent.
 

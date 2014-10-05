@@ -2,6 +2,10 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import java.net.URI;
 import org.apache.http.annotation.NotThreadSafe;
 
+/*
+ * HttpDeleteWithBody - helper class needed to implement bot delete method.
+ *
+ */
 @NotThreadSafe
 class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
     public static final String METHOD_NAME = "DELETE";
