@@ -17,7 +17,7 @@ import java.util.List;
  *
  */
 public class MagicParameters {
-    public static String version = "0.0.5";
+    public static String version = "0.0.6";
     public static String user_key = "unknown";
     public static String app_id = "unknown";
     public static String hostname = "unknown";
