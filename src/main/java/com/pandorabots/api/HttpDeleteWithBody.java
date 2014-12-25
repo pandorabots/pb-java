@@ -1,23 +1,37 @@
+/**
+ * HttpDeleteWithBody.java
+ */
+package com.pandorabots.api;
+
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import java.net.URI;
 import org.apache.http.annotation.NotThreadSafe;
 
-/*
- * HttpDeleteWithBody - helper class needed to implement bot delete method.
- *
+/**
+ * @author Richard Wallace
+ * 
+ *         HttpDeleteWithBody - helper class needed to implement bot delete
+ *         method.
  */
 @NotThreadSafe
-class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
-    public static final String METHOD_NAME = "DELETE";
-    public String getMethod() { return METHOD_NAME; }
+public class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
+	public static final String METHOD_NAME = "DELETE";
 
-    public HttpDeleteWithBody(final String uri) {
-        super();
-        setURI(URI.create(uri));
-    }
-    public HttpDeleteWithBody(final URI uri) {
-        super();
-        setURI(uri);
-    }
-    public HttpDeleteWithBody() { super(); }
+	public String getMethod() {
+		return METHOD_NAME;
+	}
+
+	public HttpDeleteWithBody(final String uri) {
+		super();
+		setURI(URI.create(uri));
+	}
+
+	public HttpDeleteWithBody(final URI uri) {
+		super();
+		setURI(uri);
+	}
+
+	public HttpDeleteWithBody() {
+		super();
+	}
 }

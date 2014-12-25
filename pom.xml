@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.pandorabots</groupId>
+  <artifactId>pb-java</artifactId>
+  <version>0.0.7</version>
+  <name>Pandorabots API for Java</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.apache.httpcomponents</groupId>
+  		<artifactId>httpclient</artifactId>
+  		<version>4.2.1</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.json</groupId>
+  		<artifactId>json</artifactId>
+  		<version>20090211</version>
+  	</dependency>
+  </dependencies>
+  <url>https://github.com/pandorabots/pb-java</url>
+  <description>Pandorabots API for Java.
+</description>
+</project>
