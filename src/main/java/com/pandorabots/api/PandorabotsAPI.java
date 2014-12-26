@@ -3,6 +3,15 @@
  */
 package com.pandorabots.api;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.io.FilenameUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -12,14 +21,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-
-import java.io.*;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -67,7 +70,6 @@ public class PandorabotsAPI {
 		String response = "";
 		try {
 			int code = httpResp.getStatusLine().getStatusCode();
-
 			Log(TAG, "Response code = " + code);
 			InputStream is = httpResp.getEntity().getContent();
 			BufferedReader inb = new BufferedReader(new InputStreamReader(is));
@@ -80,7 +82,6 @@ public class PandorabotsAPI {
 			}
 			inb.close();
 			response = sb.toString();
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -90,59 +91,53 @@ public class PandorabotsAPI {
 	public void createBot(String botname) {
 		Log(TAG, "Create bot " + botname);
 		try {
-			HttpClient client = new DefaultHttpClient();
 			String url = protocol + "//" + host + "/bot/" + app_id + "/"
 					+ botname;
 			Log(TAG, "url = " + url);
-			HttpPut request = new HttpPut();
-			request.setURI(new URI(url));
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 			nameValuePairs.add(new BasicNameValuePair("user_key", user_key));
-			HttpEntity entity = new UrlEncodedFormEntity(nameValuePairs);
 			Log(TAG, "entity = " + nameValuePairs);
-			request.setEntity(entity);
-			HttpResponse httpResp = client.execute(request);
+			HttpPut request = new HttpPut();
+			request.setURI(new URI(url));
+			request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpClient httpClient = HttpClientBuilder.create().build();
+			HttpResponse httpResp = httpClient.execute(request);
 			readResponse(httpResp);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 	public void deleteBot(String botname) {
 		Log(TAG, "Delete bot " + botname);
 		try {
-			HttpClient client = new DefaultHttpClient();
 			String url = protocol + "//" + host + "/bot/" + app_id + "/"
 					+ botname + "?user_key=" + user_key;
 			Log(TAG, "url = " + url);
 			HttpDeleteWithBody request = new HttpDeleteWithBody();
 			request.setURI(new URI(url));
-			HttpResponse httpResp = client.execute(request);
+			HttpClient httpClient = HttpClientBuilder.create().build();
+			HttpResponse httpResp = httpClient.execute(request);
 			readResponse(httpResp);
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 	public void compileBot(String botname) {
 		Log(TAG, "Compile bot " + botname);
 		try {
-			HttpClient client = new DefaultHttpClient();
 			String url = protocol + "//" + host + "/bot/" + app_id + "/"
 					+ botname + "/" + "verify?user_key=" + user_key;
 			Log(TAG, "url = " + url);
 			HttpGet request = new HttpGet();
 			request.setURI(new URI(url));
-			HttpResponse httpResp = client.execute(request);
+			HttpClient httpClient = HttpClientBuilder.create().build();
+			HttpResponse httpResp = httpClient.execute(request);
 			readResponse(httpResp);
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 	public String talk(String botname, String input) {
@@ -158,12 +153,9 @@ public class PandorabotsAPI {
 		Log(TAG, "Talk " + botname + " \"" + input + "\"");
 		String response = "";
 		try {
-			HttpClient client = new DefaultHttpClient();
 			String url = protocol + "//" + host + "/talk/" + app_id + "/"
 					+ botname;
 			Log(TAG, "url = " + url);
-			HttpPost request = new HttpPost();
-			request.setURI(new URI(url));
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 			if (sessionid.length() > 0)
 				nameValuePairs.add(new BasicNameValuePair("sessionid",
@@ -181,8 +173,11 @@ public class PandorabotsAPI {
 				nameValuePairs.add(new BasicNameValuePair("recent", "true"));
 			HttpEntity entity = new UrlEncodedFormEntity(nameValuePairs);
 			Log(TAG, "entity = " + nameValuePairs);
+			HttpPost request = new HttpPost();
+			request.setURI(new URI(url));
 			request.setEntity(entity);
-			HttpResponse httpResp = client.execute(request);
+			HttpClient httpClient = HttpClientBuilder.create().build();
+			HttpResponse httpResp = httpClient.execute(request);
 			String jsonStringResponse = readResponse(httpResp);
 			JSONObject jsonObj = new JSONObject(jsonStringResponse);
 			JSONArray responses = jsonObj.getJSONArray("responses");
@@ -196,47 +191,39 @@ public class PandorabotsAPI {
 			ex.printStackTrace();
 		}
 		return response;
-
 	}
 
 	// Upload file /bot/{appid}/{botname}/{file-kind}/{filename
-	public void uploadFile(String botname, String filename) {
-		String fileType = "file";
-		boolean includeFileName = true;
+	public void uploadFile(String botName, String pathName) {
 		try {
-			File file = new File(filename);
-			String basename = file.getName();
-			if (filename.contains("substitution")) {
-				fileType = "substitution";
-				basename = filename.substring(0, basename.lastIndexOf('.'));
-			} else if (filename.contains(".properties")) {
-				fileType = "properties";
-				includeFileName = false;
-			} else if (filename.contains(".pdefaults")) {
-				fileType = "pdefaults";
-				includeFileName = false;
-			} else if (filename.contains(".map")) {
-				fileType = "map";
-				basename = basename.substring(0, basename.lastIndexOf('.'));
-			} else if (filename.contains(".set")) {
-				fileType = "set";
-				basename = basename.substring(0, basename.lastIndexOf('.'));
+			String baseName = FilenameUtils.getBaseName(pathName);
+			String extName = FilenameUtils.getExtension(pathName);
+			String fileKind = extName;
+			String fileName = null;
+			if (extName.equals("pdefaults") || extName.equals("properties")) {
+				;
+			} else if (extName.equals("map") || extName.equals("set")
+					|| extName.equals("substitution")) {
+				fileName = baseName;
+			} else if (extName.equals("aiml")) {
+				fileKind = "file";
+				fileName = baseName + "." + extName;
 			}
-			Log(TAG, "Upload  File " + botname);
-			Log(TAG, "Basename = " + basename);
-			HttpClient client = new DefaultHttpClient();
+			Log(TAG, "Upload  File " + botName);
+			Log(TAG, "Basename = " + baseName);
 			String url = protocol + "//" + host + "/bot/" + app_id + "/"
-					+ botname + "/" + fileType
-					+ (includeFileName ? "/" + basename : "") + "?user_key="
+					+ botName + "/" + fileKind
+					+ (fileName != null ? "/" + fileName : "") + "?user_key="
 					+ user_key;
 			Log(TAG, "url = " + url);
 			HttpPut request = new HttpPut();
 			request.setURI(new URI(url));
-			String data = MagicParameters.readFile(filename,
+			String data = MagicParameters.readFile(pathName,
 					Charset.defaultCharset());
 			StringEntity entity = new StringEntity(data);
 			request.setEntity(entity);
-			HttpResponse httpResp = client.execute(request);
+			HttpClient httpClient = HttpClientBuilder.create().build();
+			HttpResponse httpResp = httpClient.execute(request);
 			readResponse(httpResp);
 		} catch (Exception ex) {
 			ex.printStackTrace();

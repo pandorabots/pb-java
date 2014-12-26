@@ -3,9 +3,10 @@
  */
 package com.pandorabots.api;
 
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import java.net.URI;
+
 import org.apache.http.annotation.NotThreadSafe;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 
 /**
  * @author Richard Wallace

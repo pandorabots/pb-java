@@ -2,21 +2,58 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.pandorabots</groupId>
   <artifactId>pb-java</artifactId>
-  <version>0.0.7</version>
+  <version>0.0.8</version>
   <name>Pandorabots API for Java</name>
   <dependencies>
   	<dependency>
   		<groupId>org.apache.httpcomponents</groupId>
   		<artifactId>httpclient</artifactId>
-  		<version>4.2.1</version>
+  		<exclusions>
+  			<exclusion>
+  				<artifactId>commons-logging</artifactId>
+  				<groupId>commons-logging</groupId>
+  			</exclusion>
+  		</exclusions>
   	</dependency>
   	<dependency>
   		<groupId>org.json</groupId>
   		<artifactId>json</artifactId>
   		<version>20090211</version>
   	</dependency>
+  	<dependency>
+  		<groupId>commons-io</groupId>
+  		<artifactId>commons-io</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>commons-logging</groupId>
+  		<artifactId>commons-logging</artifactId>
+  	</dependency>
   </dependencies>
   <url>https://github.com/pandorabots/pb-java</url>
   <description>Pandorabots API for Java.
 </description>
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>org.json</groupId>
+  			<artifactId>json</artifactId>
+  			<version>20090211</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.apache.httpcomponents</groupId>
+  			<artifactId>httpclient</artifactId>
+  			<version>RELEASE</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>commons-logging</groupId>
+  			<artifactId>commons-logging</artifactId>
+  			<version>RELEASE</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>commons-io</groupId>
+  			<artifactId>commons-io</artifactId>
+  			<version>RELEASE</version>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
 </project>
