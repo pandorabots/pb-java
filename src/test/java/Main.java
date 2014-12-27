@@ -28,11 +28,10 @@ public class Main {
 	public static String botName = "yyconn2";
 
 	public static void main(String[] args) {
-		System.out.println("pb-java version " + MagicParameters.version);
-		MagicParameters.readParameters();
-		PandorabotsAPI papi = new PandorabotsAPI(MagicParameters.hostName,
-				MagicParameters.appId, MagicParameters.userKey,
-				MagicParameters.debug);
+		MagicParameters mp = new MagicParameters();
+		System.out.println("pb-java version " + mp.getVersion());
+		PandorabotsAPI papi = new PandorabotsAPI(mp.getHostName(),
+				mp.getAppId(), mp.getUserKey(), mp.isDebug());
 		System.out.println("Creating bot " + botName);
 		papi.createBot(botName);
 		System.out.println("Deleting bot " + botName);

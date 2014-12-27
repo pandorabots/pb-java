@@ -42,19 +42,67 @@ import java.util.List;
  */
 public class MagicParameters {
 	/** Version. */
-	public static String version = "0.0.6";
+	private String version = "0.0.6";
 
 	/** The User Key assigned by Pandorabots. */
-	public static String userKey = "unknown";
+	private String userKey = "unknown";
 
 	/** The Application ID assigned by Pandorabots. */
-	public static String appId = "unknown";
+	private String appId = "unknown";
 
 	/** server name of pandorabots API */
-	public static String hostName = "unknown";
+	private String hostName = "unknown";
 
 	/** flag to indicate verbosity of output. */
-	public static boolean debug = false;
+	private boolean debug = false;
+
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
+	}
+
+	/**
+	 * @return the userKey
+	 */
+	public String getUserKey() {
+		return userKey;
+	}
+
+	/**
+	 * @return the appId
+	 */
+	public String getAppId() {
+		return appId;
+	}
+
+	/**
+	 * @return the hostName
+	 */
+	public String getHostName() {
+		return hostName;
+	}
+
+	/**
+	 * @return the debug
+	 */
+	public boolean isDebug() {
+		return debug;
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * <p>
+	 * Read config.txt in user.dir directory.
+	 * </p>
+	 * 
+	 */
+	public MagicParameters() {
+		String cwd = System.getProperty("user.dir");
+		readParameters(cwd + "/config.txt");
+	}
 
 	/**
 	 * Helper for reading file as list of lines.
@@ -65,7 +113,7 @@ public class MagicParameters {
 	 * @throws IOException
 	 * @since 0.0.1
 	 */
-	private static List<String> readLines(String path, Charset encoding)
+	private List<String> readLines(String path, Charset encoding)
 			throws IOException {
 		List<String> lines = Files.readAllLines(Paths.get(path), encoding);
 		return lines;
@@ -74,20 +122,10 @@ public class MagicParameters {
 	/**
 	 * Read parameter file.
 	 * 
-	 * @since 0.0.1
-	 */
-	public static void readParameters() {
-		String cwd = System.getProperty("user.dir");
-		readParameters(cwd + "/config.txt");
-	}
-
-	/**
-	 * Read parameter file.
-	 * 
 	 * @param configFileName
 	 * @since 0.0.1
 	 */
-	private static void readParameters(String configFileName) {
+	private void readParameters(String configFileName) {
 		try {
 			List<String> lines = readLines(configFileName,
 					Charset.defaultCharset());
