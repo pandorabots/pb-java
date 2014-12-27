@@ -105,21 +105,6 @@ public class MagicParameters {
 	}
 
 	/**
-	 * Helper for reading file as list of lines.
-	 * 
-	 * @param path
-	 * @param encoding
-	 * @return content of file as string
-	 * @throws IOException
-	 * @since 0.0.1
-	 */
-	private List<String> readLines(String path, Charset encoding)
-			throws IOException {
-		List<String> lines = Files.readAllLines(Paths.get(path), encoding);
-		return lines;
-	}
-
-	/**
 	 * Read parameter file.
 	 * 
 	 * @param configFileName
@@ -151,5 +136,20 @@ public class MagicParameters {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	/**
+	 * Helper for reading file as list of lines.
+	 * 
+	 * @param path
+	 * @param encoding
+	 * @return content of file as string
+	 * @throws IOException
+	 * @since 0.0.1
+	 */
+	private List<String> readLines(String path, Charset encoding)
+			throws IOException {
+		List<String> lines = Files.readAllLines(Paths.get(path), encoding);
+		return lines;
 	}
 }
