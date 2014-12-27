@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.pandorabots</groupId>
   <artifactId>pb-java</artifactId>
-  <version>0.0.8</version>
+  <version>0.0.9</version>
   <name>Pandorabots API for Java</name>
   <dependencies>
   	<dependency>

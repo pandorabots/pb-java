@@ -57,21 +57,6 @@ public class MagicParameters {
 	public static boolean debug = false;
 
 	/**
-	 * Helper for reading file.
-	 * 
-	 * @param path
-	 * @param encoding
-	 * @return content of file as string
-	 * @throws IOException
-	 * @since 0.0.1
-	 */
-	static String readFile(String path, Charset encoding) throws IOException {
-		byte[] encoded = Files.readAllBytes(Paths.get(path));
-		return new String(encoded, encoding);
-
-	}
-
-	/**
 	 * Helper for reading file as list of lines.
 	 * 
 	 * @param path

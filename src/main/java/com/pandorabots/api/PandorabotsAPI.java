@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,8 @@ import org.json.JSONObject;
  * Pandorabots API Class.
  * <p>
  * Created by User on 6/25/2014.<br>
- * See: <a href="https://developer.pandorabots.com/docs">Pandorabots API Documentation</a><br>
+ * See: <a href="https://developer.pandorabots.com/docs">Pandorabots API
+ * Documentation</a><br>
  * </p>
  * 
  * @author Richard Wallace
@@ -44,6 +47,9 @@ public class PandorabotsAPI {
 	private String tag = "PandorabotsAPI";
 	private String protocol = "https:";
 
+	/** flag to indicate verbosity of output. */
+	private boolean debug = false;
+
 	/**
 	 * Print out debuggining info.
 	 * 
@@ -52,8 +58,18 @@ public class PandorabotsAPI {
 	 * @since 0.0.1
 	 */
 	private void Log(String tag, String message) {
-		if (MagicParameters.debug)
+		if (debug)
 			System.out.println(tag + ": " + message);
+	}
+
+	/**
+	 * Constructor without debug.
+	 * 
+	 * @see #PandorabotsAPI(String, String, String, boolean)
+	 * @since 0.0.1
+	 */
+	public PandorabotsAPI(String host, String appId, String userKey) {
+		this(host, appId, userKey, false);
 	}
 
 	/**
@@ -65,12 +81,16 @@ public class PandorabotsAPI {
 	 *            app_id to pandrabots API
 	 * @param userKey
 	 *            user_key to pandrabots API
-	 * @since 0.0.1
+	 * @param debug
+	 *            print debug info if true
+	 * @since 0.0.9
 	 */
-	public PandorabotsAPI(String host, String appId, String userKey) {
+	public PandorabotsAPI(String host, String appId, String userKey,
+			boolean debug) {
 		this.host = host;
 		this.appId = appId;
 		this.userKey = userKey;
+		this.debug = debug;
 	}
 
 	/**
@@ -304,9 +324,9 @@ public class PandorabotsAPI {
 			Log(tag, "url = " + url);
 			HttpPut request = new HttpPut();
 			request.setURI(new URI(url));
-			String data = MagicParameters.readFile(pathName,
-					Charset.defaultCharset());
-			StringEntity entity = new StringEntity(data);
+			byte[] bytes = Files.readAllBytes(Paths.get(pathName));
+			StringEntity entity = new StringEntity(new String(bytes,
+					Charset.defaultCharset()));
 			request.setEntity(entity);
 			HttpClient httpClient = HttpClientBuilder.create().build();
 			HttpResponse httpResp = httpClient.execute(request);

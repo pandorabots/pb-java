@@ -31,7 +31,8 @@ public class Main {
 		System.out.println("pb-java version " + MagicParameters.version);
 		MagicParameters.readParameters();
 		PandorabotsAPI papi = new PandorabotsAPI(MagicParameters.hostName,
-				MagicParameters.appId, MagicParameters.userKey);
+				MagicParameters.appId, MagicParameters.userKey,
+				MagicParameters.debug);
 		System.out.println("Creating bot " + botName);
 		papi.createBot(botName);
 		System.out.println("Deleting bot " + botName);
