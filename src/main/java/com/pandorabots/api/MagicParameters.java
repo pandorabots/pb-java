@@ -10,60 +10,99 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
+ * Global storage for Magic Parameters associated with PandorabotsAPI.
+ * <p>
+ * Created by User on 7/10/2014.<br>
+ * <ul>
+ * <li>One need to create a parameter file called config.txt in the directory
+ * where the Java program runs.
+ * <li>The parameters file config.txt should contain one parameter per line,
+ * with the format parametername:value e.g.
+ * <table>
+ * <tr>
+ * <td>user_key:f0123456789abcdef0123456789abcde</td>
+ * </tr>
+ * <tr>
+ * <td>app_id:1234567890123</td>
+ * </tr>
+ * <tr>
+ * <td>hostname:aiaas.pandorabots.com</td>
+ * </tr>
+ * <tr>
+ * <td>debug:true</td>
+ * </tr>
+ * </table>
+ * <li>The user_key and app_id are provided at developer.pandorabots.com as
+ * "User Key" and "Application ID respectively.
+ * </ul>
+ * </p>
+ * 
  * @author Richard Wallace
- * 
- *         Created by User on 7/10/2014.
- * 
- *         Global storage for Magic Parameters associated with PandorabotsAPI
- * 
- *         version - Program version user_key - The User Key assigned by
- *         developer.pandorabots.com app_id - The Application ID assigned by
- *         developer.pandorabots.com hostname - The name of the Pandorabots host
- *         debug - flag to indicate verbosity of output
- * 
+ * @since 0.0.1
  */
 public class MagicParameters {
+	/** Version. */
 	public static String version = "0.0.6";
-	public static String user_key = "unknown";
-	public static String app_id = "unknown";
-	public static String hostname = "unknown";
+
+	/** The User Key assigned by Pandorabots. */
+	public static String userKey = "unknown";
+
+	/** The Application ID assigned by Pandorabots. */
+	public static String appId = "unknown";
+
+	/** server name of pandorabots API */
+	public static String hostName = "unknown";
+
+	/** flag to indicate verbosity of output. */
 	public static boolean debug = false;
 
+	/**
+	 * Helper for reading file.
+	 * 
+	 * @param path
+	 * @param encoding
+	 * @return content of file as string
+	 * @throws IOException
+	 * @since 0.0.1
+	 */
 	static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
 
 	}
 
-	static List<String> readLines(String path, Charset encoding)
+	/**
+	 * Helper for reading file as list of lines.
+	 * 
+	 * @param path
+	 * @param encoding
+	 * @return content of file as string
+	 * @throws IOException
+	 * @since 0.0.1
+	 */
+	private static List<String> readLines(String path, Charset encoding)
 			throws IOException {
 		List<String> lines = Files.readAllLines(Paths.get(path), encoding);
 		return lines;
 	}
 
-	/*
+	/**
+	 * Read parameter file.
 	 * 
-	 * Create a parameters file called config.txt in the directory where the
-	 * Java program runs.
-	 * 
-	 * The parameters file config.txt should contain one parameter per line,
-	 * with the format parametername:value
-	 * 
-	 * e.g.
-	 * 
-	 * user_key:f0123456789abcdef0123456789abcde app_id:1234567890123
-	 * hostname:aiaas.pandorabots.com debug:true
-	 * 
-	 * The user_key and app_id are provided at developer.pandorabots.com as
-	 * "User Key" and "Application ID respectively.
+	 * @since 0.0.1
 	 */
-
 	public static void readParameters() {
 		String cwd = System.getProperty("user.dir");
 		readParameters(cwd + "/config.txt");
 	}
 
-	static void readParameters(String configFileName) {
+	/**
+	 * Read parameter file.
+	 * 
+	 * @param configFileName
+	 * @since 0.0.1
+	 */
+	private static void readParameters(String configFileName) {
 		try {
 			List<String> lines = readLines(configFileName,
 					Charset.defaultCharset());
@@ -71,11 +110,11 @@ public class MagicParameters {
 				String[] pair = line.split(":");
 				if (pair.length >= 2) {
 					if (pair[0].equals("user_key"))
-						user_key = pair[1];
+						userKey = pair[1];
 					else if (pair[0].equals("app_id"))
-						app_id = pair[1];
+						appId = pair[1];
 					else if (pair[0].equals("hostname"))
-						hostname = pair[1];
+						hostName = pair[1];
 					else if (pair[0].equals("debug")) {
 						if (pair[1].equals("true"))
 							debug = true;

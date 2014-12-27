@@ -9,10 +9,10 @@ import org.apache.http.annotation.NotThreadSafe;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 
 /**
- * @author Richard Wallace
+ * Helper class needed to implement bot delete method.
  * 
- *         HttpDeleteWithBody - helper class needed to implement bot delete
- *         method.
+ * @author Richard Wallace
+ * @since 0.0.1
  */
 @NotThreadSafe
 public class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
