@@ -515,13 +515,13 @@ public class PandorabotsAPI {
 	 * @param input
 	 *            text for conversation
 	 * @param extra
-	 *            adds additional information into response
+	 *            adds extra information into response
 	 * @param reset
 	 *            reset status of bot
 	 * @param trace
 	 *            adds trace data into response
 	 * @param reload
-	 *            forse system to realod bot
+	 *            force system to realod bot
 	 * @param recent
 	 *            use recent pod even if it is older than files
 	 * @return text of bot's response
