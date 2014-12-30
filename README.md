@@ -1,8 +1,8 @@
 # pb-java
 
-Version 0.0.6
+Version 0.0.9
 
-Last revised November 6, 2014
+Last revised December 28, 2014
 
 ## Pandorabots API module for Java
 
@@ -14,10 +14,8 @@ Use this project if:
 
 ### Usage
 
-The simplest way to use the pb-java API is to include the classes
-HttpDeleteWithBody, MagicParameters, and PandorabotsAPI in your Java project.
-
-Most commonly, your Java project will simply connect to a pandorabot and talk to it.  You can easily implement this with:
+The simplest way to use the pb-java API is to add pb-java-X.X.X.jar into CLASSPATH.
+Most commonly, your Java project will simply connect to a pandorabot and talk to it. You can easily implement this with:
 
 ```
 public static String botname = "MyBot";
@@ -35,15 +33,16 @@ String response = papi.talk(botname, request);
 
 ### Dependencies
 
-The pb-java API depends on the following JAR files.  You may include
-them in your project with Maven or Gradle, or simply download the JAR
-files and link them with your project.
+The pb-java API depends on the following JAR files.
+You may import this project with "Existing Maven Project" in Eclipse,
+or use Gradle, or simply download the JAR files and link them with your project.
 
-* commons-logging-1.1.1.jar
-* httpclient-4.2.1.jar
-* httpclient-cache-4.2.1.jar
-* httpcore-4.2.1.jar
-* httpmime-4.2.1.jar
+* commons-codec-1.6.jar
+* commons-logging-1.2.jar
+* commons-io-2.4.jar
+* fluent-hc-4.4-beta1.jar
+* httpclient-4.4-beta1.jar
+* httpcore-4.4-beta1.jar
 * json-20090211.jar
 
 #### Classes
@@ -96,22 +95,8 @@ debug:true
 The user_key and app_id are provided at developer.pandorabots.com
 as "User Key" and "Application ID respectively.
 
-##### HttpDeleteWithBody
-
-The `HttpDeleteWithBody` class is a helper class needed to implement the
-`deleteBot()` method in PandorabotsAPI.
-
 ##### PandorabotsAPI
 
-The class PandorabotsAPI is the core of the code to access the Pandorabots API.  The class contains several key methods:
-
-* `public PandorabotsAPI(String host, String app_id, String user_key)` -- constructor
-* `public String readResponse (HttpResponse httpResp)` -- read the response of an HTTP request and return a String.
-* `public void createBot(String botname)` -- create a bot named botname.
-* `public void deleteBot(String botname)` -- delete the bot named botname.
-* `public void uploadFile(String botname, String filename)` -- upload a file name filename to the bot named botname.
-* `public void compileBot(String botname)` -- compile the bot named botname.
-* `public String talk(String botname, String input)` -- send the string input tothe bot named botname, and return the bot's response as a String.
-* `public String talk(String botname, String client_name, String input)` -- talk to the bot as a specific client.
-* `public String debugBot(String botname, String client_name, String input, boolean reset, boolean trace, boolean recent)` -- debug the bot's response to the input.  See the API documentation at develoepr.pandorabots.com for an explanation of the booleans reset, trace and recent.
+The class PandorabotsAPI is the core of the code to access the Pandorabots API.
+Please refer Java DOC of Pandorabots API.
 
