@@ -3,7 +3,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.pandorabots</groupId>
 	<artifactId>pb-java</artifactId>
-	<version>0.0.9</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -68,4 +67,5 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<version>1.0.0</version>
 </project>

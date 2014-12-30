@@ -1,8 +1,8 @@
 # pb-java
 
-Version 0.0.9
+Version 1.0.0
 
-Last revised December 28, 2014
+Last revised December 29, 2014
 
 ## Pandorabots API module for Java
 
