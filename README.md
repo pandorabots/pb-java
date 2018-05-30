@@ -73,10 +73,13 @@ configuration data:
 * `static void readParameters()`
 * `static void readParameters(String configFileName)`
 
+
+##### config.txt
+
 The first method looks for a file called config.txt in the current working
 directory.  Use the second method if you want to specify a different file.
 
-The parameters file config.txt should contain one parameter per line, with the format
+Create config.txt file according to following format with one parameter per line.
 
 ```
 parametername:value

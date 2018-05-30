@@ -26,22 +26,40 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/*
+ * previously supported
+ * talk(botname, input)
+ * talk(botname, clientId, input)
+ * 
+ * 
+ * Now support following functionality
+ * talk(botname, input)
+ * talk(botname, clientId, input)
+ * talk(botname, clientId, input, extra) //with recent calls always true
+ * atalk(botname,input)
+ * atalk(botname,clientId,input)
+ * atalk(botname,clientId,input,extra) //with recent calls always true
+ */
+
 /**
  * Pandorabots API Class.
  * <p>
  * Created by User on 6/25/2014.<br>
+ * Edited by Aadish Joshi on 5/30/2018
  * See: <a href="https://developer.pandorabots.com/docs">Pandorabots API
  * Documentation</a><br>
  * </p>
  * 
  * @author Richard Wallace
- * @version 0.0.9
+ * @edited by Aadish Joshi
+ * @version 1.0.0
  */
 public class PandorabotsAPI {
 	private String host = null;
 	private String userKey = null;
 	private String appId = null;
 	private String sessionId = null;
+	private String set_client_name = null;
 
 	/** flag to indicate verbosity of output. */
 	private boolean debug = false;
@@ -105,7 +123,7 @@ public class PandorabotsAPI {
 	 * composing path part of URI.
 	 * 
 	 * @param mode
-	 *            bot or talk
+	 *            bot or talk or atalk
 	 * @param botName
 	 *            name of bot
 	 * @param kind
@@ -254,6 +272,21 @@ public class PandorabotsAPI {
 	private URI talkUri(String botName) throws URISyntaxException {
 		return new URI(composeUri("talk", botName, null, null));
 	}
+	
+	/**
+	 * composing URI for anonymously talking to bot.
+	 * 
+	 * @param botName
+	 * @param params
+	 * @return URI for request
+	 * @throws URISyntaxException
+	 * @since 1.0.0
+	 */
+	
+	private URI atalkUri(String botName) throws URISyntaxException {
+		return new URI(composeUri("atalk", botName, null, null));
+	}
+
 
 	/**
 	 * Read response from Pandorabots server.
@@ -477,12 +510,13 @@ public class PandorabotsAPI {
 	 * @see #talk(String, String, String)
 	 * @since 0.0.1
 	 */
+
 	public String talk(String botName, String input)
 			throws ClientProtocolException, IOException, JSONException,
 			URISyntaxException {
-		return talk(botName, null, input);
+		return debugBot(botName, null, input, false, false, false, false,
+				false);
 	}
-
 	/**
 	 * Talk to a bot as a specific client.
 	 * 
@@ -503,6 +537,100 @@ public class PandorabotsAPI {
 		return debugBot(botName, clientName, input, false, false, false, false,
 				false);
 	}
+	
+	/**
+	 * Talk to a bot as a specific client debug purpose.
+	 * 
+	 * @param botName
+	 *            name of bot
+	 * @param clientName
+	 *            name of client
+	 * @param input
+	 *            text for conversation
+	 * @param extra
+	 *            boolean for conversation
+	 * @param recent = true
+	 *            boolean for conversation
+	 * @return text of bot's response
+	 * @see #debugBot(String, String, String, boolean, boolean, boolean,
+	 *      boolean, boolean)
+	 * @since 1.0.0
+	 */
+
+	public String talk(String botName, String clientName, String input,boolean extra)
+			throws ClientProtocolException, IOException, JSONException,
+			URISyntaxException {
+		return debugBot(botName, clientName, input, extra, false, false, false,
+				true);
+	}
+	
+	/**
+	 * Simplest method to anonymously talk to a bot.
+	 * 
+	 * @param botName
+	 *            name of bot
+	 * @param input
+	 *            text for conversation
+	 * @return text of bot's response
+	 * @see #atalkdebugBot(String, String, String, boolean, boolean, boolean,
+	 *      boolean, boolean)
+	 * @since 1.0.0
+	 */
+	
+	public String atalk(String botName, String input)
+			throws ClientProtocolException, IOException, JSONException,
+			URISyntaxException {
+		return atalk(botName, null, input);
+	}
+	
+	/**
+	 * Anonymously talk to a bot as a specific client.
+	 * 
+	 * @param botName
+	 *            name of bot
+	 * @param clientName
+	 *            name of client
+	 * @param input
+	 *            text for conversation
+	 * @return text of bot's response
+	 * @see #atalkdebugBot(String, String, String, boolean, boolean, boolean,
+	 *      boolean, boolean)
+	 * @since 1.0.0
+	 */
+	
+	public String atalk(String botName, String clientName, String input)
+			throws ClientProtocolException, IOException, JSONException,
+			URISyntaxException {
+		return atalkdebugBot(botName, clientName, input, false, false, false, false,
+				false);
+	}
+	
+	
+	/**
+	 * Anonymously talk to a bot as a specific client debug purpose.
+	 * 
+	 * @param botName
+	 *            name of bot
+	 * @param clientName
+	 *            name of client
+	 * @param input
+	 *            text for conversation
+	 * @param extra
+	 *            boolean for conversation
+	 * @param recent = true
+	 *            boolean for conversation
+	 * @return text of bot's response
+	 * @see #atalkdebugBot(String, String, String, boolean, boolean, boolean,
+	 *      boolean, boolean)
+	 * @since 1.0.0
+	 */
+	
+	public String atalk(String botName, String clientName, String input,boolean extra)
+			throws ClientProtocolException, IOException, JSONException,
+			URISyntaxException {
+		return atalkdebugBot(botName, clientName, input, extra, false, false, false,
+				true);
+	}
 
 	/**
 	 * Most general version of talk method that returns detailed debugging
@@ -521,15 +649,17 @@ public class PandorabotsAPI {
 	 * @param trace
 	 *            adds trace data into response
 	 * @param reload
-	 *            force system to realod bot
+	 *            force system to reload bot
 	 * @param recent
 	 *            use recent pod even if it is older than files
 	 * @return text of bot's response
+	 * @return metadata response if extra set to true 
 	 * @throws IOException
 	 * @throws JSONException
 	 * @throws ClientProtocolException
 	 * @throws URISyntaxException
 	 * @since 0.0.1
+	 * @edited 1.0.0
 	 */
 	public String debugBot(String botName, String clientName, String input,
 			boolean extra, boolean reset, boolean trace, boolean reload,
@@ -555,15 +685,101 @@ public class PandorabotsAPI {
 		if (recent)
 			params.add(new BasicNameValuePair("recent", "true"));
 		Log("Talk params=" + URLEncodedUtils.format(params, "UTF-8"));
-		String response = Request.Post(uri).bodyForm(params).execute()
-				.returnContent().asString();
-		JSONObject jObj = new JSONObject(response);
-		sessionId = jObj.getString("sessionid");
-		JSONArray jArray = jObj.getJSONArray("responses");
-		String responses = "";
-		for (int i = 0; i < jArray.length(); i++) {
-			responses += jArray.getString(i).trim();
+		try{
+			String response = Request.Post(uri).bodyForm(params).execute()
+			
+					.returnContent().asString();
+			JSONObject jObj = new JSONObject(response);
+			sessionId = jObj.getString("sessionid");
+			JSONArray jArray = jObj.getJSONArray("responses");
+			if(extra){
+				Log("\nExtra: \n"+jObj.toString());
+				}
+			String responses = "";
+			for (int i = 0; i < jArray.length(); i++) {
+				responses += jArray.getString(i).trim();
+			}
+			return responses;
+		}catch(Exception e) {
+			Log("\nError: "+e.toString());
+			return "";
 		}
-		return responses;
 	}
+	
+	/**
+	 * Most general version of anonymous talk method that returns detailed debugging
+	 * information.
+	 * 
+	 * @param botName
+	 *            name of bot
+	 * @param clientName
+	 *            name of client (optional)
+	 * @param input
+	 *            text for conversation
+	 * @param extra
+	 *            adds extra information into response
+	 * @param reset
+	 *            reset status of bot
+	 * @param trace
+	 *            adds trace data into response
+	 * @param reload
+	 *            force system to reload bot
+	 * @param recent
+	 *            use recent pod even if it is older than files
+	 * @return text of bot's response
+	 * @return newly generated clientId
+	 * @return metadata response if extra set to true 
+	 * @throws IOException
+	 * @throws JSONException
+	 * @throws ClientProtocolException
+	 * @throws URISyntaxException
+	 * @since 1.0.0
+	 */
+	
+	public String atalkdebugBot(String botName, String clientName, String input,
+			boolean extra, boolean reset, boolean trace, boolean reload,
+			boolean recent) throws ClientProtocolException, IOException,
+			JSONException, URISyntaxException {
+		URI uri = atalkUri(botName);
+		Log("Anonymously Talk to botName=" + botName + " input=\"" + input + "\"" + " uri="
+				+ uri);
+		List<NameValuePair> params = baseParams();
+		params.add(new BasicNameValuePair("input", input));
+		if (clientName != null)
+			params.add(new BasicNameValuePair("client_name", clientName));
+		if (sessionId != null)
+			params.add(new BasicNameValuePair("sessionid", sessionId));
+		if (extra)
+			params.add(new BasicNameValuePair("extra", "true"));
+		if (reset)
+			params.add(new BasicNameValuePair("reset", "true"));
+		if (trace)
+			params.add(new BasicNameValuePair("trace", "true"));
+		if (reload)
+			params.add(new BasicNameValuePair("reload", "true"));
+		if (recent)
+			params.add(new BasicNameValuePair("recent", "true"));
+		Log("aTalk params=" + URLEncodedUtils.format(params, "UTF-8"));
+		
+		String responses = "";
+		try {
+			String response = Request.Post(uri).bodyForm(params).execute()
+					.returnContent().asString();
+			JSONObject jObj = new JSONObject(response);
+			sessionId = jObj.getString("sessionid");
+			set_client_name = jObj.getString("client_name");
+			JSONArray jArray = jObj.getJSONArray("responses");
+			if(extra){
+				Log("\nExtra: \n"+jObj.toString());
+			}
+			for (int i = 0; i < jArray.length(); i++) {
+				responses += jArray.getString(i).trim();
+			}
+			return responses +"\nclientId: "+set_client_name+"\n";
+		}catch(Exception e) {
+			Log("\nError"+e.toString());
+			return "";
+		}
+	}
+	
 }

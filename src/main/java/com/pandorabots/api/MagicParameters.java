@@ -38,20 +38,22 @@ import java.util.List;
  * </p>
  * 
  * @author Richard Wallace
+ * @edited by Aadish Joshi
  * @since 0.0.1
+ * @edited 1.0.0
  */
 public class MagicParameters {
 	/** Version. */
-	private String version = "0.0.6";
+	private String version = "1.0.0";
 
 	/** The User Key assigned by Pandorabots. */
-	private String userKey = "unknown";
+	private String userKey = "";
 
 	/** The Application ID assigned by Pandorabots. */
-	private String appId = "unknown";
+	private String appId = "";
 
 	/** server name of pandorabots API */
-	private String hostName = "unknown";
+	private String hostName = "";
 
 	/** flag to indicate verbosity of output. */
 	private boolean debug = false;
