@@ -572,7 +572,7 @@ public class PandorabotsAPI {
 	 * @param input
 	 *            text for conversation
 	 * @return text of bot's response
-	 * @see #atalkdebugBot(String, String, String, boolean, boolean, boolean,
+	 * @see #atalkDebugBot(String, String, String, boolean, boolean, boolean,
 	 *      boolean, boolean)
 	 * @since 1.0.0
 	 */
@@ -593,7 +593,7 @@ public class PandorabotsAPI {
 	 * @param input
 	 *            text for conversation
 	 * @return text of bot's response
-	 * @see #atalkdebugBot(String, String, String, boolean, boolean, boolean,
+	 * @see #atalkDebugBot(String, String, String, boolean, boolean, boolean,
 	 *      boolean, boolean)
 	 * @since 1.0.0
 	 */
@@ -601,7 +601,7 @@ public class PandorabotsAPI {
 	public String atalk(String botName, String clientName, String input)
 			throws ClientProtocolException, IOException, JSONException,
 			URISyntaxException {
-		return atalkdebugBot(botName, clientName, input, false, false, false, false,
+		return atalkDebugBot(botName, clientName, input, false, false, false, false,
 				false);
 	}
 	
@@ -620,7 +620,7 @@ public class PandorabotsAPI {
 	 * @param recent = true
 	 *            boolean for conversation
 	 * @return text of bot's response
-	 * @see #atalkdebugBot(String, String, String, boolean, boolean, boolean,
+	 * @see #atalkDebugBot(String, String, String, boolean, boolean, boolean,
 	 *      boolean, boolean)
 	 * @since 1.0.0
 	 */
@@ -628,7 +628,7 @@ public class PandorabotsAPI {
 	public String atalk(String botName, String clientName, String input,boolean extra)
 			throws ClientProtocolException, IOException, JSONException,
 			URISyntaxException {
-		return atalkdebugBot(botName, clientName, input, extra, false, false, false,
+		return atalkDebugBot(botName, clientName, input, extra, false, false, false,
 				true);
 	}
 
@@ -736,7 +736,7 @@ public class PandorabotsAPI {
 	 * @since 1.0.0
 	 */
 	
-	public String atalkdebugBot(String botName, String clientName, String input,
+	public String atalkDebugBot(String botName, String clientName, String input,
 			boolean extra, boolean reset, boolean trace, boolean reload,
 			boolean recent) throws ClientProtocolException, IOException,
 			JSONException, URISyntaxException {
