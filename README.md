@@ -45,17 +45,17 @@ or use Gradle, or simply download the JAR files and link them with your project.
 * httpcore-4.4-beta1.jar
 * json-20090211.jar
 
-#### Classes
+### Classes
 
 The pb-java project includes several classes.
 
-##### Main
+### Main
 
 The Main class is provided as an example of how to use the Java Pandorabots 
 API.  You may wish to customize the code in PandorabotsAPI to suit your
 application needs.  The code provided is intentended as an example only.
 
-##### MagicParameters
+### MagicParameters
 
 The MagicParameters class encapsulates some global variables for your
 application:
@@ -73,10 +73,12 @@ configuration data:
 * `static void readParameters()`
 * `static void readParameters(String configFileName)`
 
+### config.txt
+
 The first method looks for a file called config.txt in the current working
 directory.  Use the second method if you want to specify a different file.
 
-The parameters file config.txt should contain one parameter per line, with the format
+Create config.txt file according to following format with one parameter per line.
 
 ```
 parametername:value
@@ -89,13 +91,36 @@ user_key:f0123456789abcdef0123456789abcde
 app_id:1234567890123
 hostname:aiaas.pandorabots.com
 debug:true
-
 ```
 
 The user_key and app_id are provided at developer.pandorabots.com
 as "User Key" and "Application ID respectively.
 
-##### PandorabotsAPI
+### To talk to the bot
+
+Currently pb-java v1.0.0 supports following talk and atalk functionalities
+
+```
+talk(botname, input)
+talk(botname, clientId, input)
+talk(botname, clientId, input, extra) //with recent calls always true 
+atalk(botname,input)
+atalk(botname,clientId,input)
+atalk(botname,clientId,input,extra) //with recent calls always true 
+
+```
+
+talk
+* @return text of bot's response<br>
+* @return metadata response if extra set to true <br>
+<br>
+
+atalk<br>
+* @return text of bot's response<br>
+* @return newly generated clientId<br>
+* @return metadata response if extra set to true 
+
+### PandorabotsAPI
 
 The class PandorabotsAPI is the core of the code to access the Pandorabots API.
 Please refer Java DOC of Pandorabots API.
