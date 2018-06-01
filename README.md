@@ -1,8 +1,8 @@
 # pb-java
 
-Version 1.0.0
+Version 1.0.1
 
-Last revised December 29, 2014
+Last revised June 01,2018
 
 ## Pandorabots API module for Java
 
@@ -98,7 +98,7 @@ as "User Key" and "Application ID respectively.
 
 ### To talk to the bot
 
-Currently pb-java v1.0.0 supports following talk and atalk functionalities
+Currently pb-java v1.0.1 supports following talk and atalk functionalities
 
 ```
 talk(botname, input)
