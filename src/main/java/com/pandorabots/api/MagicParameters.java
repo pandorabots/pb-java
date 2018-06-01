@@ -40,11 +40,11 @@ import java.util.List;
  * @author Richard Wallace
  * @edited by Aadish Joshi
  * @since 0.0.1
- * @edited 1.0.0
+ * @edited 1.0.1
  */
 public class MagicParameters {
 	/** Version. */
-	private String version = "1.0.0";
+	private String version = "1.0.1";
 
 	/** The User Key assigned by Pandorabots. */
 	private String userKey = "";

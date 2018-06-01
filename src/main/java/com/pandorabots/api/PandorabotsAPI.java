@@ -52,13 +52,13 @@ import org.json.JSONObject;
  * 
  * @author Richard Wallace
  * @edited by Aadish Joshi
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class PandorabotsAPI {
 	private String host = null;
 	private String userKey = null;
 	private String appId = null;
-	private String sessionId = null;
+	private int sessionId = -1;
 	private String set_client_name = null;
 
 	/** flag to indicate verbosity of output. */
@@ -280,7 +280,7 @@ public class PandorabotsAPI {
 	 * @param params
 	 * @return URI for request
 	 * @throws URISyntaxException
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 */
 	
 	private URI atalkUri(String botName) throws URISyntaxException {
@@ -554,7 +554,7 @@ public class PandorabotsAPI {
 	 * @return text of bot's response
 	 * @see #debugBot(String, String, String, boolean, boolean, boolean,
 	 *      boolean, boolean)
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 */
 
 	public String talk(String botName, String clientName, String input,boolean extra)
@@ -574,7 +574,7 @@ public class PandorabotsAPI {
 	 * @return text of bot's response
 	 * @see #atalkDebugBot(String, String, String, boolean, boolean, boolean,
 	 *      boolean, boolean)
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 */
 	
 	public String atalk(String botName, String input)
@@ -595,7 +595,7 @@ public class PandorabotsAPI {
 	 * @return text of bot's response
 	 * @see #atalkDebugBot(String, String, String, boolean, boolean, boolean,
 	 *      boolean, boolean)
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 */
 	
 	public String atalk(String botName, String clientName, String input)
@@ -622,7 +622,7 @@ public class PandorabotsAPI {
 	 * @return text of bot's response
 	 * @see #atalkDebugBot(String, String, String, boolean, boolean, boolean,
 	 *      boolean, boolean)
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 */
 	
 	public String atalk(String botName, String clientName, String input,boolean extra)
@@ -659,7 +659,7 @@ public class PandorabotsAPI {
 	 * @throws ClientProtocolException
 	 * @throws URISyntaxException
 	 * @since 0.0.1
-	 * @edited 1.0.0
+	 * @edited 1.0.1
 	 */
 	public String debugBot(String botName, String clientName, String input,
 			boolean extra, boolean reset, boolean trace, boolean reload,
@@ -672,8 +672,8 @@ public class PandorabotsAPI {
 		params.add(new BasicNameValuePair("input", input));
 		if (clientName != null)
 			params.add(new BasicNameValuePair("client_name", clientName));
-		if (sessionId != null)
-			params.add(new BasicNameValuePair("sessionid", sessionId));
+		if (sessionId != -1)
+			params.add(new BasicNameValuePair("sessionid", Integer.toString(sessionId)));
 		if (extra)
 			params.add(new BasicNameValuePair("extra", "true"));
 		if (reset)
@@ -690,7 +690,9 @@ public class PandorabotsAPI {
 			
 					.returnContent().asString();
 			JSONObject jObj = new JSONObject(response);
-			sessionId = jObj.getString("sessionid");
+			sessionId = jObj.getInt("sessionid");
+//			sessionId = Integer.parseInt(jObj.getString("sessionid"));
+//			System.out.println("SessionId:"+sessionId);
 			JSONArray jArray = jObj.getJSONArray("responses");
 			if(extra){
 				Log("\nExtra: \n"+jObj.toString());
@@ -733,7 +735,7 @@ public class PandorabotsAPI {
 	 * @throws JSONException
 	 * @throws ClientProtocolException
 	 * @throws URISyntaxException
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 */
 	
 	public String atalkDebugBot(String botName, String clientName, String input,
@@ -747,8 +749,8 @@ public class PandorabotsAPI {
 		params.add(new BasicNameValuePair("input", input));
 		if (clientName != null)
 			params.add(new BasicNameValuePair("client_name", clientName));
-		if (sessionId != null)
-			params.add(new BasicNameValuePair("sessionid", sessionId));
+		if (sessionId != -1)
+			params.add(new BasicNameValuePair("sessionid", Integer.toString(sessionId)));
 		if (extra)
 			params.add(new BasicNameValuePair("extra", "true"));
 		if (reset)
@@ -766,7 +768,9 @@ public class PandorabotsAPI {
 			String response = Request.Post(uri).bodyForm(params).execute()
 					.returnContent().asString();
 			JSONObject jObj = new JSONObject(response);
-			sessionId = jObj.getString("sessionid");
+			sessionId = jObj.getInt("sessionid");
+//			sessionId = Integer.parseInt(jObj.getString("sessionid"));
+//			System.out.println("SessionId:"+sessionId);
 			set_client_name = jObj.getString("client_name");
 			JSONArray jArray = jObj.getJSONArray("responses");
 			if(extra){
