@@ -675,6 +675,7 @@ public class PandorabotsAPI {
 	 * @throws URISyntaxException
 	 * @since 0.0.1
 	 * @edited 1.1.0
+
 	 */
 	public String debugBot(String botName, String clientName, String input,
 			boolean extra, boolean reset, boolean trace, boolean reload,
