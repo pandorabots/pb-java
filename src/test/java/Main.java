@@ -86,6 +86,14 @@ public class Main {
 			System.out.println("Get ZIP of bot " + botName);
 			papi.getZip(botName);
 
+			System.out.println("aTalk to " + botName);
+			for (int i = 0; i < inputs.length; i++) {
+				String request = inputs[i];
+				response = papi.atalk(botName, request);
+				System.out.println("Human: " + request);
+				System.out.println("Robot: " + response);
+			}
+			
 			System.out.println("Talk to " + botName);
 			for (int i = 0; i < inputs.length; i++) {
 				String request = inputs[i];

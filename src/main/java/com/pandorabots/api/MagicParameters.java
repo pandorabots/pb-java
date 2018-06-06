@@ -40,11 +40,11 @@ import java.util.List;
  * @author Richard Wallace
  * @edited by Aadish Joshi
  * @since 0.0.1
- * @edited 1.0.0
+ * @edited 1.1.0
  */
 public class MagicParameters {
 	/** Version. */
-	private String version = "1.0.0";
+	private String version = "1.1.0";
 
 	/** The User Key assigned by Pandorabots. */
 	private String userKey = "";
@@ -58,6 +58,11 @@ public class MagicParameters {
 	/** flag to indicate verbosity of output. */
 	private boolean debug = false;
 
+
+	/** header for requests */
+	private String referrer = null;
+
+	
 	/**
 	 * @return the version
 	 */
@@ -94,6 +99,14 @@ public class MagicParameters {
 	}
 
 	/**
+	 * @return the referrer
+	 */
+	public String getReferrer() {
+		return referrer;
+	}
+	
+	
+	/**
 	 * Constructor.
 	 * 
 	 * <p>
@@ -111,6 +124,7 @@ public class MagicParameters {
 	 * 
 	 * @param configFileName
 	 * @since 0.0.1
+	 * @edited 1.1.0
 	 */
 	private void readParameters(String configFileName) {
 		try {
@@ -131,8 +145,13 @@ public class MagicParameters {
 						else
 							debug = false;
 					}
-					// System.out.println("pair =" + pair[0] + "," + pair[1]);
+					else if (pair[0].equals("referrer")) {
+						referrer = pair[1];
+					}
 				}
+			}
+			if(referrer == null) {
+				referrer = "pbJava";
 			}
 
 		} catch (Exception ex) {
