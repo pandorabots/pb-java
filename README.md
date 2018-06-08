@@ -1,8 +1,8 @@
 # pb-java
 
-Version 1.0.1
+Version 1.1.0
 
-Last revised June 01,2018
+Last revised June 06,2018
 
 ## Pandorabots API module for Java
 
@@ -80,6 +80,9 @@ directory.  Use the second method if you want to specify a different file.
 
 Create config.txt file according to following format with one parameter per line.
 
+v1.1.0 includes Referrer Filters. User can set Referrer Filters on developer.pandorabots.com.
+If Referrer Filter is set on developer.pandorabots.com it is mandatory to set referrer flag in config.txt; else optional.
+
 ```
 parametername:value
 ```
@@ -91,14 +94,16 @@ user_key:f0123456789abcdef0123456789abcde
 app_id:1234567890123
 hostname:aiaas.pandorabots.com
 debug:true
+referrer:(set on developer.pandorabots.com)
 ```
+
 
 The user_key and app_id are provided at developer.pandorabots.com
 as "User Key" and "Application ID respectively.
 
 ### To talk to the bot
 
-Currently pb-java v1.0.1 supports following talk and atalk functionalities
+Currently pb-java v1.1.0 supports following talk and atalk functionalities
 
 ```
 talk(botname, input)

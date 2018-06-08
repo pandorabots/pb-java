@@ -52,7 +52,7 @@ import org.json.JSONObject;
  * 
  * @author Richard Wallace
  * @edited by Aadish Joshi
- * @version 1.0.1
+ * @version 1.1.0
  */
 public class PandorabotsAPI {
 	private String host = null;
@@ -60,6 +60,7 @@ public class PandorabotsAPI {
 	private String appId = null;
 	private int sessionId = -1;
 	private String set_client_name = null;
+	private String referrer = null;
 
 	/** flag to indicate verbosity of output. */
 	private boolean debug = false;
@@ -98,6 +99,7 @@ public class PandorabotsAPI {
 	 * @param debug
 	 *            print debug info if true
 	 * @since 0.0.9
+	 * @edited 1.1.0
 	 */
 	public PandorabotsAPI(String host, String appId, String userKey,
 			boolean debug) {
@@ -105,8 +107,11 @@ public class PandorabotsAPI {
 		this.appId = appId;
 		this.userKey = userKey;
 		this.debug = debug;
+		this.referrer = new MagicParameters().getReferrer();
 	}
+	
 
+//	
 	/**
 	 * helper for composing URI.
 	 * 
@@ -157,6 +162,7 @@ public class PandorabotsAPI {
 		return params;
 	}
 
+	
 	/**
 	 * composing parameter part of URI.
 	 * 
@@ -327,12 +333,13 @@ public class PandorabotsAPI {
 	 * @throws JSONException
 	 * @throws URISyntaxException
 	 * @since 0.0.9
+	 * @edited 1.1.0
 	 */
 	public List<String> list() throws ClientProtocolException, IOException,
 			JSONException, URISyntaxException {
 		URI uri = listUri();
 		Log("List uri=" + uri);
-		String response = Request.Get(uri).execute().returnContent().asString();
+		String response = Request.Get(uri).addHeader("Referer",referrer).execute().returnContent().asString();
 		JSONArray jArray = new JSONArray(response);
 		List<String> names = new ArrayList<String>();
 		for (int i = 0; i < jArray.length(); i++) {
@@ -351,12 +358,13 @@ public class PandorabotsAPI {
 	 * @throws ClientProtocolException
 	 * @throws URISyntaxException
 	 * @since 0.0.1
+	 * @edited 1.1.0
 	 */
 	public String createBot(String botName) throws ClientProtocolException,
 			IOException, URISyntaxException {
 		URI uri = botUri(botName);
 		Log("Create botName=" + botName + " uri=" + uri);
-		HttpResponse response = Request.Put(uri).execute().returnResponse();
+		HttpResponse response = Request.Put(uri).addHeader("Referer",referrer).execute().returnResponse();
 		return readResponse(response);
 	}
 
@@ -370,12 +378,13 @@ public class PandorabotsAPI {
 	 * @throws ClientProtocolException
 	 * @throws URISyntaxException
 	 * @since 0.0.1
+	 * @edited 1.1.0
 	 */
 	public String deleteBot(String botName) throws ClientProtocolException,
 			IOException, URISyntaxException {
 		URI uri = botUri(botName);
 		Log("Delete botName=" + botName + " uri=" + uri);
-		HttpResponse response = Request.Delete(uri).execute().returnResponse();
+		HttpResponse response = Request.Delete(uri).addHeader("Referer",referrer).execute().returnResponse();
 		return readResponse(response);
 	}
 
@@ -391,6 +400,7 @@ public class PandorabotsAPI {
 	 * @throws ClientProtocolException
 	 * @throws URISyntaxException
 	 * @since 0.0.1
+	 * @edited 1.1.0
 	 */
 	public String uploadFile(String botName, String pathName)
 			throws ClientProtocolException, IOException, URISyntaxException {
@@ -399,7 +409,7 @@ public class PandorabotsAPI {
 				+ uri);
 		HttpResponse response = Request.Put(uri)
 				.bodyByteArray(Files.readAllBytes(Paths.get(pathName)))
-				.execute().returnResponse();
+				.addHeader("Referer",referrer).execute().returnResponse();
 		return readResponse(response);
 	}
 
@@ -414,13 +424,14 @@ public class PandorabotsAPI {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 * @since 0.0.9
+	 * @edited 1.1.0
 	 */
 	public String removeFile(String botName, String fileName)
 			throws ClientProtocolException, IOException, URISyntaxException {
 		URI uri = fileUri(botName, fileName);
 		Log("Remove botName=" + botName + " fileName=" + fileName + " uri="
 				+ uri);
-		HttpResponse response = Request.Delete(uri).execute().returnResponse();
+		HttpResponse response = Request.Delete(uri).addHeader("Referer",referrer).execute().returnResponse();
 		return readResponse(response);
 	}
 
@@ -435,13 +446,14 @@ public class PandorabotsAPI {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 * @since 0.0.9
+	 * @edited 1.1.0
 	 */
 	public void downloadFile(String botName, String fileName)
 			throws ClientProtocolException, IOException, URISyntaxException {
 		URI uri = fileUri(botName, fileName);
 		Log("Download botName=" + botName + " fileName=" + fileName + " uri="
 				+ uri);
-		Request.Get(uri).execute().saveContent(new File(fileName));
+		Request.Get(uri).addHeader("Referer",referrer).execute().saveContent(new File(fileName));
 	}
 
 	/**
@@ -454,12 +466,13 @@ public class PandorabotsAPI {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 * @since 0.0.9
+	 * @edited 1.1.0
 	 */
 	public String getProperties(String botName) throws ClientProtocolException,
 			IOException, URISyntaxException {
 		URI uri = botUri(botName);
 		Log("Get botName=" + botName + " uri=" + uri);
-		HttpResponse response = Request.Get(uri).execute().returnResponse();
+		HttpResponse response = Request.Get(uri).addHeader("Referer",referrer).execute().returnResponse();
 		return readResponse(response);
 	}
 
@@ -472,12 +485,13 @@ public class PandorabotsAPI {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 * @since 0.0.9
+	 * @edited 1.1.0
 	 */
 	public void getZip(String botName) throws ClientProtocolException,
 			IOException, URISyntaxException {
 		URI uri = zipUri(botName);
 		Log("Get ZIP botName=" + botName + " uri=" + uri);
-		Request.Get(uri).execute().saveContent(new File(botName + ".zip"));
+		Request.Get(uri).addHeader("Referer",referrer).execute().saveContent(new File(botName + ".zip"));
 	}
 
 	/**
@@ -490,12 +504,13 @@ public class PandorabotsAPI {
 	 * @throws ClientProtocolException
 	 * @throws URISyntaxException
 	 * @since 0.0.1
+	 * @edited 1.1.0
 	 */
 	public String compileBot(String botName) throws ClientProtocolException,
 			IOException, URISyntaxException {
 		URI uri = verifyUri(botName);
 		Log("Compile botName=" + botName + "uri=" + uri);
-		HttpResponse response = Request.Get(uri).execute().returnResponse();
+		HttpResponse response = Request.Get(uri).addHeader("Referer",referrer).execute().returnResponse();
 		return readResponse(response);
 	}
 
@@ -659,7 +674,8 @@ public class PandorabotsAPI {
 	 * @throws ClientProtocolException
 	 * @throws URISyntaxException
 	 * @since 0.0.1
-	 * @edited 1.0.1
+	 * @edited 1.1.0
+
 	 */
 	public String debugBot(String botName, String clientName, String input,
 			boolean extra, boolean reset, boolean trace, boolean reload,
@@ -686,8 +702,7 @@ public class PandorabotsAPI {
 			params.add(new BasicNameValuePair("recent", "true"));
 		Log("Talk params=" + URLEncodedUtils.format(params, "UTF-8"));
 		try{
-			String response = Request.Post(uri).bodyForm(params).execute()
-			
+			String response = Request.Post(uri).bodyForm(params).addHeader("Referer",referrer).execute()
 					.returnContent().asString();
 			JSONObject jObj = new JSONObject(response);
 			sessionId = jObj.getInt("sessionid");
@@ -736,6 +751,7 @@ public class PandorabotsAPI {
 	 * @throws ClientProtocolException
 	 * @throws URISyntaxException
 	 * @since 1.0.1
+	 * @edited 1.1.0
 	 */
 	
 	public String atalkDebugBot(String botName, String clientName, String input,
@@ -765,7 +781,7 @@ public class PandorabotsAPI {
 		
 		String responses = "";
 		try {
-			String response = Request.Post(uri).bodyForm(params).execute()
+			String response = Request.Post(uri).bodyForm(params).addHeader("Referer",referrer).execute()
 					.returnContent().asString();
 			JSONObject jObj = new JSONObject(response);
 			sessionId = jObj.getInt("sessionid");
